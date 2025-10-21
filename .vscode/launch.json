@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/shape-project/Shape",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/shape-project/Shape/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/numbers",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/numbers/build/Debug/outDebug"
     }
   ]
 }
