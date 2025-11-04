@@ -19,95 +19,67 @@ struct Board {
     int numFilled;
 };
 
-Move bestMove(Board & bd);
+Move bestMove(Board &bd);
 
-bool xTurn(const Board & bd) {
-    return bd.numFilled % 2 == 0;
-}
-bool oTurn(const Board & bd) {
-    return bd.numFilled % 2 == 1;
-}
+bool xTurn(const Board &bd) { return bd.numFilled % 2 == 0; }
+bool oTurn(const Board &bd) { return bd.numFilled % 2 == 1; }
+bool isFull(const Board &bd) { return bd.numFilled == BOARDSIZE; }
+bool isFree(const Board &bd, int sq) { return bd.squares[sq] == '-'; }
 
-bool isFull(const Board & bd) {
-    return bd.numFilled == BOARDSIZE;
-}
+int immediateValue(const Board &bd) {
+    int winCombos[10][4] = {
+        {0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15},
+        {0,4,8,12}, {1,5,9,13}, {2,6,10,14}, {3,7,11,15},
+        {0,5,10,15}, {3,6,9,12}
+    };
+    int xCount = 0, oCount = 0;
 
-bool isFree(const Board & bd, int sq) {
-    return bd.squares[sq] == '-';
-}
-bool isX(const Board & bd, int sq) {
-    return bd.squares[sq] == 'X';
-}
-bool isO(const Board & bd, int sq) {
-    return bd.squares[sq] == 'O';
-}
-
-// Return 1 for X win, -1 for O win and zero for nobody has won so far
-int immediateValue(const Board& bd) {
-    if (NUMROWS > 4 || NUMCOLS > 4) {
-        cout << "Unsupported board size" << endl;
-        return 0;
+    for (int i = 0; i < 10; i++) {
+        int a = winCombos[i][0], b = winCombos[i][1], c = winCombos[i][2], d = winCombos[i][3];
+        if (bd.squares[a] == 'X' && bd.squares[b] == 'X' && bd.squares[c] == 'X' && bd.squares[d] == 'X')
+            xCount++;
+        if (bd.squares[a] == 'O' && bd.squares[b] == 'O' && bd.squares[c] == 'O' && bd.squares[d] == 'O')
+            oCount++;
     }
-    // Determine correct return value for 4 by 4 board
 
-    int winningSquares[16][4] = {
-        { 0, 1, 2, 3 },  { 4, 5, 6, 7  }, { 8, 9, 10, 11 }, { 12, 13, 14, 15 },
-        { 0, 4, 8, 12 }, { 1, 5, 9, 13 }, { 2, 6, 10, 14 }, { 3, 7, 11, 15 },
-        { 0, 5, 10, 15 }, { 3, 6, 9, 12 }, { 0, 3, 12, 15}, {5, 6, 9, 10}, {4, 7, 8, 11}, {1, 2, 13, 14}, { 1,7,14,8 }, {2, 11, 13, 4 } };
-     // FILL IN
-
-    return 0;  // didn't find a win for X or for O
+    if (xCount > oCount) return WINX;
+    else if (oCount > xCount) return WINO;
+    else return 0; // tie
 }
 
-// Does the current board have three X's
-bool isWinX(const Board & bd) {
-    return immediateValue(bd) == 1;
-}
-
-// Does the current board have three 0's 
-bool isWinO(const Board & bd) {
-    return immediateValue(bd) == -1;
-}
-
-// Determine the value of the current board,
-// i.e. is it an ultimate win for 'X' (value 1)
-// an ultimate win fo 'O'
-int boardValue(Board & bd) {
+int boardValue(Board &bd) {
     int val = immediateValue(bd);
-    if (val != 0 || isFull(bd)) return val;
+    if (isFull(bd)) return val;
     return bestMove(bd).value;
 }
 
-// Determine the best move for the current board
-Move bestMove(Board & bd) {
+Move bestMove(Board &bd) {
     bool xT = xTurn(bd);
     int bestValue = xT ? -10 : 10;
     int bestSquare = -1;
-    char ch = xT ? 'X' : 'O';
-    for (int squareNum = 0; squareNum < BOARDSIZE; squareNum++) {
-        if (isFree(bd, squareNum)) {
-            bd.squares[squareNum] = ch; // try moving to squareNum
+    char mark = xT ? 'X' : 'O';
+
+    for (int i = 0; i < BOARDSIZE; i++) {
+        if (isFree(bd, i)) {
+            bd.squares[i] = mark;
             bd.numFilled++;
-            int v = boardValue(bd);  // determ
-            if (xT ? v > bestValue : v < bestValue) {
+            int v = boardValue(bd);  // recursive call
+            if (xT && v > bestValue) {
                 bestValue = v;
-                bestSquare = squareNum;
+                bestSquare = i;
             }
-            bd.squares[squareNum] = '-'; // undo move
+            if (!xT && v < bestValue) {
+                bestValue = v;
+                bestSquare = i;
+            }
+            bd.squares[i] = '-';
             bd.numFilled--;
         }
-        if (xT ? bestValue == WINX : bestValue == WINO)
-            return Move{ bestSquare, bestValue };
     }
-    return Move{ bestSquare,bestValue };
+    return Move{bestSquare, bestValue};
 }
 
-
-
-
-
-// Print the board
-void printBoard(const Board & bd) {
+void printBoard(const Board &bd) {
     cout << endl;
     for (int i = 0; i < NUMROWS; i++) {
         for (int j = 0; j < NUMCOLS; j++) {
@@ -116,85 +88,103 @@ void printBoard(const Board & bd) {
         cout << "\t\t";
         for (int j = 0; j < NUMCOLS; j++) {
             int sq = i * NUMCOLS + j;
-            cout << sq << " "; if (sq < 10) cout << " ";
+            cout << sq << " ";
+            if (sq < 10) cout << " ";
         }
         cout << endl << endl;
     }
     cout << endl;
 }
 
-// Mark the given square with an X or O depending on whose move it is
-void moveTo(Board & bd, int squareNum) {
-    char ch = (bd.numFilled % 2 == 0 ? 'X' : 'O');
+void moveTo(Board &bd, int squareNum) {
+    char mark = (bd.numFilled % 2 == 0 ? 'X' : 'O');
     if (isFree(bd, squareNum)) {
-        bd.squares[squareNum] = ch;
+        bd.squares[squareNum] = mark;
         bd.numFilled++;
+    } else {
+        cout << "ERROR: square already filled\n";
     }
-    else cout << "ERROR, squareNum = " << squareNum << endl;
 }
 
-// initialize the board
-void initBoard(Board & bd) {
-    for (int i = 0; i < BOARDSIZE; i++)
-        bd.squares[i] = '-';  // meaning a 'blank'
-    bd.numFilled = 0;  // no square has 'X' or 'O' yet
+void initBoard(Board &bd) {
+    for (int i = 0; i < BOARDSIZE; i++) bd.squares[i] = '-';
+    bd.numFilled = 0;
 }
-int getRandomSquare(Board& bd) {
-    bool found;
+
+int getRandomSquare(Board &bd) {
     int sq;
     do {
         sq = rand() % BOARDSIZE;
-        found = bd.squares[sq] == '-';
-       
-    } while (!found);
+    } while (!isFree(bd, sq));
     return sq;
 }
 
-
-int main()
-{
+void countTallies(const Board &bd, int &xCount, int &oCount) {
+    int winCombos[10][4] = {
+        {0,1,2,3}, {4,5,6,7}, {8,9,10,11}, {12,13,14,15},
+        {0,4,8,12}, {1,5,9,13}, {2,6,10,14}, {3,7,11,15},
+        {0,5,10,15}, {3,6,9,12}
+    };
+    xCount = 0;
+    oCount = 0;
+    for (int i = 0; i < 10; i++) {
+        int a = winCombos[i][0], b = winCombos[i][1], c = winCombos[i][2], d = winCombos[i][3];
+        if (bd.squares[a] == 'X' && bd.squares[b] == 'X' && bd.squares[c] == 'X' && bd.squares[d] == 'X')
+            xCount++;
+        if (bd.squares[a] == 'O' && bd.squares[b] == 'O' && bd.squares[c] == 'O' && bd.squares[d] == 'O')
+            oCount++;
+    }
+}
+int main() {
     srand(time(0));
     Board bd;
-  
+    initBoard(bd);
+
     cout << "Computer starts? (y/n) ";
     char response;
     cin >> response;
-    bool computerTurn = response == 'y';
-    bool gameOver = false;
-    int squareNum;
-    initBoard(bd);
+    bool computerTurn = (response == 'y');
+
     int preMoves;
     cout << "Please enter the number of squares to randomly fill in ( > 3) :";
     cin >> preMoves;
-    for (int i = 0; i < preMoves; i++) moveTo(bd, getRandomSquare(bd));
     if (preMoves < 4) preMoves = 4;
 
-    printBoard(bd);
-    while (!gameOver) {
-        if (computerTurn) {
-            int sqn = bestMove(bd).squareNum;
-            moveTo(bd, sqn);
-            cout << "Computer moves to square " << sqn << endl;
-        }
-        else {
-            printBoard(bd);
-            cout << "Enter square number: ";
+    for (int i = 0; i < preMoves; i++)
+        moveTo(bd, getRandomSquare(bd));
 
-            cin >> squareNum;
-            moveTo(bd, squareNum);
+    printBoard(bd);
+
+    while (!isFull(bd)) {
+        if (computerTurn) {
+            Move mv = bestMove(bd);
+            moveTo(bd, mv.squareNum);
+            cout << "Computer moves to square " << mv.squareNum << endl;
+            printBoard(bd);
+        } else {
+            int sq;
+            cout << "Enter square number: ";
+            cin >> sq;
+            moveTo(bd, sq);
             printBoard(bd);
         }
-        if (isFull(bd) || isWinX(bd) || isWinO(bd))
-            gameOver = true;
-        else computerTurn = !computerTurn;
+        computerTurn = !computerTurn; // alternate turns
     }
-    int v = immediateValue(bd);
+
+    int xCount, oCount;
+    countTallies(bd, xCount, oCount);
+
+    cout << endl;
     printBoard(bd);
-    if (v == 0) cout << "Cat's game" << endl;
-    else if (computerTurn) cout << "Computer wins!" << endl;
-    else cout << "You win!" << endl;
+    if (xCount > oCount) {
+        cout << "X wins!" << endl;
+    } else if (oCount > xCount) {
+        cout << "O wins!" << endl;
+    } else {
+        cout << "Cat's game" << endl;
+    }
+    cout << "x tally is " << xCount << endl;
+    cout << "o tally is " << oCount << endl;
 
     return 0;
 }
-
-
