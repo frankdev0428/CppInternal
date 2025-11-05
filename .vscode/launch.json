@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/Recursion-algorithm/modified-tic-tac-toe",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/Recursion-algorithm/modified-tic-tac-toe/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/link-lists/Linlist-operator",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/link-lists/Linlist-operator/build/Debug/outDebug"
     }
   ]
 }
