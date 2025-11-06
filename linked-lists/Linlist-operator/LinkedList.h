@@ -9,8 +9,6 @@
 // Later we will code a generalized version of
 
 // a linked list that can store other types of data.
-
-
 class Node {
 
 public:
@@ -78,9 +76,6 @@ public:
 
  }
 
-
-
-
  int& operator[] (int index) {
 
  Node* n = getNode(index); // Save result. DO NOT call function twice.
@@ -95,11 +90,6 @@ public:
 
  */
 
-
-
-
-
-
   void removeAValue(int v); // find and remove the first occurrence of v
 
   void removeAtIndex(int index);  // remove the value at the given index
@@ -107,9 +97,6 @@ public:
   void insertAtIndex(int v, int index); // insert value v at the given index
 
   int count(int v) const; // count number of occurrences of v
-
- 
-
 };
 
 
