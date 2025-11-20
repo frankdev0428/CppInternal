@@ -122,6 +122,7 @@ public:
 //  Lab 11/5
 //  Implement the member function reverse whose prototype is below:
  void reverse() ;  
+ void interleave(const LinkedList & other);
 //  HERE'S HOW TO CODE IT:
 //  declare two pointers:  previous and current. previous is initialized to headPtr
 //  and current is initialized to headPtr->next. 

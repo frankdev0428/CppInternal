@@ -33,8 +33,6 @@ LinkedList::~LinkedList() {
 
 void LinkedList::insertFirst(int v) {
     Node* toInsert = new Node(v, headPtr);
-    headPtr = toInsert;
-    length++;
 }
 
 void LinkedList::removeFirst() {
@@ -85,7 +83,7 @@ void LinkedList::removeAValue(int v) {
         pre->next = toDelete->next;
         delete toDelete;
         length--;
-    }
+    } 
 }
 
 void LinkedList::removeAtIndex(int index) {
@@ -133,4 +131,44 @@ int LinkedList::count(int v) const {
         current = current->next;
     }
     return count;
+}
+
+Node* LinkedList::sortHelper(Node* first) {
+    //validate expression 
+    if (first == nullptr || first->next == nullptr)
+        return first;
+
+     // split list into two halves using slow/fast pointers
+    Node* slow = first;
+    Node* fast = first->next;
+    while(fast != nullptr && fast->next != nullptr){
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    Node* mid = slow->next;
+    slow->next = nullptr;
+
+    // sort each half recursively
+    Node* left = sortHelper(first);
+    Node* right = sortHelper(mid);
+
+      // merge the two sorted halves
+    Node dummy(0, nullptr);
+    Node* tail = &dummy;
+    while (left != nullptr && right != nullptr) {
+        if (left->value <= right->value) {
+          tail->next = left;
+          left = left->next;
+        } else {
+            tail->next = right;
+            right = right->next;
+
+        }
+         tail = tail->next;
+    }
+    
+    tail->next = (left != nullptr) ? left : right;
+
+    return dummy.next;
 }

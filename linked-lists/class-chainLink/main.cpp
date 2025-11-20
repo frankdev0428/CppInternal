@@ -10,7 +10,21 @@ int main()
      list1.insertFirst(3);
      list1.insertFirst(5);
      list1.insertFirst(7);
+     list1.insertFirst(3);
+     list1.insertFirst(9);
      list1.printList();
+     list1.reverse();
+     list1.printList();
+
+    LinkedList list;
+    list.insertFirst(1);
+    list.insertFirst(4);
+    list.insertFirst(6);
+    list.insertFirst(8);
+    list.printList();
+    list1.interleave(list);
+    list1.printList();
+    
   //   cout << list1[1] << endl;
   //   list1[1] = 7;
   //   cout << list1[1] << endl;
@@ -44,14 +58,13 @@ int main()
   //  list1.printList();
   //  cin.get();
 
-    for (int j = 0; j < 100; j++) {
+    for (int j = 0; j < 5; j++) {
         LinkedList list2;
-        for (int i = 0; i < 50000000; i++) {
+        for (int i = 0; i < 10; i++) {
             list2.insertFirst(i);
         }
         cout << list2.getFirst() << endl;
        // cin.get();
     }
-    
     return 0;
 }

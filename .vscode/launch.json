@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/linked-lists/class-chainLink",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/linked-lists/class-chainLink/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/linked-lists/Node-sort-mani",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/linked-lists/Node-sort-mani/build/Debug/outDebug"
     }
   ]
 }

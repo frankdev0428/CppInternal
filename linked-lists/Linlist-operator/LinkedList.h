@@ -31,9 +31,6 @@ private:
 
  int length;
 
-
-
-
 public:
 
  LinkedList();    // constructor
@@ -42,9 +39,6 @@ public:
 
  ~LinkedList();   // destructor
 
-
-
-
  void insertFirst(int v);
 
  void removeFirst();
@@ -52,9 +46,6 @@ public:
  int getFirst() const;
 
  void printList() const;
-
-
-
 
  int getLength() const;
 
@@ -97,8 +88,7 @@ public:
   void insertAtIndex(int v, int index); // insert value v at the given index
 
   int count(int v) const; // count number of occurrences of v
+  Node* sortHelper(Node* first);
 };
-
-
 
 #endif
