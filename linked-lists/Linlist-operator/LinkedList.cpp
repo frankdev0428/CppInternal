@@ -1,7 +1,7 @@
 #include "LinkedList.h"
 #include <stdexcept>
 #include <iostream>
-
+using namespace std;
 Node::Node(int v, Node* n) {
     value = v;
     next = n;
@@ -50,6 +50,8 @@ int LinkedList::getFirst() const {
     return headPtr->value;
 }
 
+
+
 void LinkedList::printList() const {
     std::cout << "< ";
     Node* current = headPtr;
@@ -59,6 +61,7 @@ void LinkedList::printList() const {
     }
     std::cout << ">" << std::endl;
 }
+
 
 int LinkedList::getLength() const {
     return length;
@@ -86,6 +89,8 @@ void LinkedList::removeAValue(int v) {
     } 
 }
 
+
+
 void LinkedList::removeAtIndex(int index) {
     if (index < 0 || index >= length)
         throw std::out_of_range("Index out of range");
@@ -105,6 +110,7 @@ void LinkedList::removeAtIndex(int index) {
     }
     length--;
 }
+
 
 void LinkedList::insertAtIndex(int v, int index) {
     if (index < 0 || index > length)

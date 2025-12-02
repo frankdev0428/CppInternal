@@ -9,7 +9,7 @@ public:
 
    Node * next;
 
-   Node (int val =0 , Node * nxt = nullptr ){
+   Node (int val = 0 , Node * nxt = nullptr ){
 
        value = val;
 
@@ -44,6 +44,9 @@ Node * sortHelper (Node * first) {
     pre->next = first;
     return t;
 }
+}
+
+
 
 int main() {
    Node * first = new Node(0);

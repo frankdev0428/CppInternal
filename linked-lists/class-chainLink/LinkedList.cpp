@@ -28,7 +28,6 @@ LinkedList::LinkedList() {
 
 
 
-
 LinkedList::~LinkedList() {
 
 std::cout << "In destructor" << std::endl;
@@ -44,11 +43,6 @@ std::cout << "In destructor" << std::endl;
  }
 
 }
-
-
-
-
-
 
 
 void LinkedList::insertFirst(int v) {
@@ -117,7 +111,6 @@ void LinkedList::printList() const {
 
 
 
-
 int LinkedList::getLength() const {
 
  return length;
@@ -134,6 +127,7 @@ void LinkedList::reverse(){
     }
     headPtr = prev;
 }
+
 void LinkedList::interleave(const LinkedList & other){
     Node* source = nullptr;
     Node* sourceTail = nullptr;
