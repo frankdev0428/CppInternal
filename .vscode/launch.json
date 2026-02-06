@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/point-classes-temp",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/point-classes-temp/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/mathStack",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/mathStack/build/Debug/outDebug"
     }
   ]
 }

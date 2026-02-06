@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <iostream>
 using namespace std;
+
+// Node constructor
 Node::Node(int v, Node* n) {
     value = v;
     next = n;
@@ -31,9 +33,14 @@ LinkedList::~LinkedList() {
     }
 }
 
+// what do you need to do to add a new node to a list?
+// this function accept integer variable v -> call node function with new and create an new node object with the value of argumenet v
+// when this funtion execute - > create a new object name toInsert
+
 void LinkedList::insertFirst(int v) {
     Node* toInsert = new Node(v, headPtr);
 }
+
 
 void LinkedList::removeFirst() {
     if (headPtr == nullptr)
@@ -49,8 +56,6 @@ int LinkedList::getFirst() const {
         throw std::logic_error("Can't get first value in an empty list!");
     return headPtr->value;
 }
-
-
 
 void LinkedList::printList() const {
     std::cout << "< ";
@@ -178,3 +183,10 @@ Node* LinkedList::sortHelper(Node* first) {
 
     return dummy.next;
 }
+
+
+//digit n sum up to target 
+bool operator>(const Point& o) const{
+   return o < *this;
+}
+ 

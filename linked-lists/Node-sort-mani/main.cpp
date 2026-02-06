@@ -2,19 +2,23 @@
 using namespace std;
 
 class Node {
-
+// no private member
+// how this Node class function ? 
+// there is one interger variable value, one pointer type Node 
 public:
 
    int value;
 
    Node * next;
+// this is constructor ,
+// the job is that whenever "new" is call so create a new node with the provide information.
+// this function initilize val = 0 or input a new value and store it in value variable.
+// of course there are a pointer name nxt initilize to nullptr since the list is empty.
 
    Node (int val = 0 , Node * nxt = nullptr ){
-
+    
        value = val;
-
         next = nxt;
-
     }
 
 };

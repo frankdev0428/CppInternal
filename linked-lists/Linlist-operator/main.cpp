@@ -6,7 +6,6 @@ using std::endl;
 
 int main()
 {
-
     LinkedList listTest;
     listTest.insertFirst(5);
     listTest.insertFirst(4);
@@ -25,6 +24,5 @@ int main()
         cout << "First value of list2 = " << list2.getFirst() << endl;
         list2.printList();
     }
-
     return 0;
 }
