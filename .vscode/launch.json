@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/mathStack",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/mathStack/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/inventoryTracker",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/stack-adt/inventoryTracker/build/Debug/outDebug"
     }
   ]
 }

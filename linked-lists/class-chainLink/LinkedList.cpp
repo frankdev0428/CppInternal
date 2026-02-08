@@ -39,9 +39,7 @@ std::cout << "In destructor" << std::endl;
  headPtr = headPtr->next;
 
  delete toDelete;
-
  }
-
 }
 
 
@@ -91,6 +89,7 @@ int LinkedList::getFirst() const {
 
 }
 
+
 void LinkedList::printList() const {
 
  std::cout << "< ";
@@ -115,6 +114,7 @@ int LinkedList::getLength() const {
 
  return length;
 }
+
 void LinkedList::reverse(){
     if (headPtr == nullptr || headPtr->next == nullptr) return;
     Node* prev = nullptr;

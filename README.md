@@ -1,7 +1,7 @@
 📚 CS15 – C++ Programming & Data Structures
 Personal Reference Repository by Hoang Le (frankdev0428)
 
-This repository contains my completed coursework, practice assignments, and reference implementations from CS15 (C++ Programming & Data Structures).
+This repository contains my completed coursework, practice assignments, and reference implementations from CS14 + cs15 + cs20 (C++ Programming & Data Structures).
 The goal is to keep everything organized for future study, portfolio use, and to track my progress as I build stronger programming foundations.
 
 🚀 Overview
