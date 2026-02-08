@@ -38,9 +38,9 @@ LinkedList::~LinkedList() {
 // when this funtion execute - > create a new object name toInsert
 
 void LinkedList::insertFirst(int v) {
+    // use new becasue this store address of the new node
     Node* toInsert = new Node(v, headPtr);
 }
-
 
 void LinkedList::removeFirst() {
     if (headPtr == nullptr)

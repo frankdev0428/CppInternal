@@ -1,28 +1,25 @@
 #ifndef DYNINVENTORY_H
 #define DYNINVENTORY_H
+#include "Hoang_Le_Inventory.h"
+
 
 class DynInventoryStack {
  private:
     struct StackNode{
-        int value;
+        Inventory item;
         StackNode* next;
     };
     StackNode* top;
     public: 
       //constructor
-      DynInventoryStack(){
-        top = nullptr;
-      }
+      DynInventoryStack();
       // Destructor
       ~DynInventoryStack();
       // Stack operations
-      void push(int);
-      void pop(int&);
-      bool isEmplty();
+      void push(const Inventory& item );
+      bool pop(Inventory& item);
+      bool isEmpty() const;
 
-
-
-
-}
+};
 
 #endif
