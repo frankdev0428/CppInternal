@@ -5,25 +5,78 @@
 using namespace std;
 
 int main() {
-// create and push the item to inventory DB
+    DynInventoryStack stack;   // create the stack
 
-Inventory item1(323,123,"02/07/2026");
-Inventory item2(324,124,"02/07/2026");
-Inventory item3(325,125,"02/07/2026");
-Inventory item4(326,126,"02/07/2026");
-DynInventoryStack stack1;
-stack1.push(item1);
-stack1.push(item2);
-stack1.push(item3);
-stack1.push(item4);
-Inventory temp;
+    cout << "Adding parts to the inventory!" << endl;
 
-while(stack1.pop(temp)){
-    cout << "Serial: " << temp.getSerialNum() << endl;
-    cout << "Lot number: " << temp.getLotNum() << endl;
-    cout << "ManuaFac Date: " << temp.getManufacDate() << endl;
-    cout << "_______________-" << endl;
-}
+    // =========================
+    // ADD PARTS LOOP
+    // =========================
+    char choice = 'y';
+
+    while (choice == 'y' || choice == 'Y')
+    {
+        int serialNum;
+        int lotNum;
+        string manufactureDate;
+
+        cout << "Enter serial number: ";
+        cin >> serialNum;
+
+        cout << "Enter manufacture date (MM/DD/YYYY): ";
+        cin >> manufactureDate;
+
+        cout << "Enter lot number: ";
+        cin >> lotNum;
+
+        // create Inventory object
+        Inventory item(serialNum, lotNum, manufactureDate);
+
+        // push onto stack
+        stack.push(item);
+
+        cout << "Add another part? (y/n): ";
+        cin >> choice;
+        cout << endl;
+    }
+cout << "Is stack empty? " << stack.isEmpty() << endl;
+    // =========================
+    // POP SPECIFIED NUMBER
+    // =========================
+    int removeCount;
+    cout << "How many parts do you want to take from the inventory? ";
+    cin >> removeCount;
+    cout << endl;
+
+    cout << "Removed parts:" << endl;
+
+    Inventory temp;
+    int removed = 0;
+
+    while (removed < removeCount && stack.pop(temp))
+    {
+        cout << "Serial Number: " << temp.getSerialNum() << endl;
+        cout << "Manufacture Date: " << temp.getManufacDate() << endl;
+        cout << "Lot Number: " << temp.getLotNum() << endl;
+        cout << endl;
+
+        removed++;
+    }
+
+    cout << "------------------------------------" << endl << endl;
+
+    // =========================
+    // POP REMAINING INVENTORY
+    // =========================
+    cout << "Remaining inventory:" << endl;
+
+    while (stack.pop(temp))
+    {
+        cout << "Serial Number: " << temp.getSerialNum() << endl;
+        cout << "Manufacture Date: " << temp.getManufacDate() << endl;
+        cout << "Lot Number: " << temp.getLotNum() << endl;
+        cout << endl;
+    }
     
 
    
