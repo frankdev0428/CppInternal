@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/quues/lab6",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/quues/lab6/build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/binarySearchTree/BST_LabyrithmGame",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/binarySearchTree/BST_LabyrithmGame/build/Debug/outDebug"
     }
   ]
 }
