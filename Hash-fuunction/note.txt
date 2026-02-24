@@ -1,0 +1,199 @@
+
+
+FirstName_LastName_lab10.cpp
+
+
+⸻
+
+🎯 PART 1 — What This Program Does
+
+You are simulating a hash table, not storing actual keys.
+
+Instead:
+	•	Create a vector of size 151
+	•	Each index stores how many keys hashed there
+	•	Read 100 numbers from numbers.txt
+	•	Apply universal hash function
+	•	Count collisions
+	•	Find which index had the most insertions
+
+⸻
+
+🧠 PART 2 — Universal Hash Function
+
+The formula is:
+
+h(x) = (a*x + b) \mod p
+
+Where:
+	•	x = number from file
+	•	a = user input
+	•	b = user input
+	•	p = 151 (size of table)
+
+In C++:
+
+int index = (a * x + b) % 151;
+
+
+⸻
+
+🧠 PART 3 — Algorithm (Simple)
+
+Step 1
+
+Create vector of size 151, initialize to 0.
+
+Step 2
+
+Open numbers.txt
+	•	If fail → print error and exit
+
+Step 3
+
+Ask user for a and b
+
+Step 4
+
+For each number in file:
+	•	Compute hash index
+	•	Increment vector[index]
+
+Step 5
+
+Print distribution
+
+Step 6
+
+Find max insertions and print location
+
+⸻
+
+✅ FULL WORKING CODE
+
+// FirstName_LastName_lab10.cpp
+
+#include <iostream>
+#include <vector>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+    const int TABLE_SIZE = 151;
+
+    // Step 1: Create hash table
+    vector<int> hashTable(TABLE_SIZE, 0);
+
+    // Step 2: Open file
+    ifstream inputFile("numbers.txt");
+
+    if (!inputFile)
+    {
+        cout << "Error opening numbers.txt file." << endl;
+        return 1;
+    }
+
+    cout << "Reading from numbers.txt......" << endl << endl;
+
+    // Step 3: Get universal hash function values
+    int a, b;
+    cout << "Enter value for a: ";
+    cin >> a;
+
+    cout << "Enter value for b: ";
+    cin >> b;
+
+    int number;
+
+    // Step 4: Read file and hash values
+    while (inputFile >> number)
+    {
+        int index = (a * number + b) % TABLE_SIZE;
+        hashTable[index]++;
+    }
+
+    inputFile.close();
+
+    // Step 5: Display distribution
+    cout << endl;
+    cout << "Hash Table Distribution:" << endl;
+
+    for (int i = 0; i < TABLE_SIZE; i++)
+    {
+        cout << "Location " << i << ": "
+             << hashTable[i] << " insertions" << endl;
+    }
+
+    // Step 6: Find location with most insertions
+    int maxInsertions = hashTable[0];
+    int maxLocation = 0;
+
+    for (int i = 1; i < TABLE_SIZE; i++)
+    {
+        if (hashTable[i] > maxInsertions)
+        {
+            maxInsertions = hashTable[i];
+            maxLocation = i;
+        }
+    }
+
+    cout << endl;
+    cout << "Location with the most insertions:" << endl;
+    cout << "Location " << maxLocation
+         << " with " << maxInsertions
+         << " insertions" << endl;
+
+    return 0;
+}
+
+
+⸻
+
+🧠 Why This Works
+
+You are NOT storing numbers.
+
+You are only counting how many numbers land in each index.
+
+If multiple numbers hash to same index → collision.
+
+That’s why some locations show 2 or 3 insertions.
+
+⸻
+
+🧪 How To Test
+	1.	Put numbers.txt in same folder as your cpp file.
+	2.	Compile:
+
+g++ FirstName_LastName_lab10.cpp -o lab10
+
+	3.	Run:
+
+./lab10
+
+	4.	Enter:
+
+a = 7
+b = 3
+
+
+⸻
+
+💬 In Your Voice Explanation
+
+Basically, I created a vector of size 151 to simulate a hash table. I read numbers from a file and used a universal hash function to compute their index. Instead of storing the actual values, I incremented the count at each location. After processing all values, I displayed the distribution and identified the location with the most collisions.
+
+⸻
+
+🔥 What This Lab Is Teaching You
+	•	Hashing concept
+	•	Collision counting
+	•	File input
+	•	Vector usage
+	•	Modulo arithmetic
+	•	Distribution analysis
+
+⸻
+
