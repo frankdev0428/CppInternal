@@ -17,18 +17,21 @@ LinkedList::LinkedList() {
 LinkedList::LinkedList(LinkedList& other) {
     headPtr = nullptr;
     length = 0;
+    // cursor start from the headptr and iterate thru the list to copy the value
     Node* cur = other.headPtr;
+    // Stop when reach the end of the list.
     while (cur != nullptr) {
         insertAtIndex(cur->value, length);
         cur = cur->next;
     }
 }
-
+// delete unuse linkedlist to prevent memory leak
 LinkedList::~LinkedList() {
     std::cout << "In destructor" << std::endl;
     while (headPtr != nullptr) {
         Node* toDelete = headPtr;
         headPtr = headPtr->next;
+        // delete os build in methods ready to use 
         delete toDelete;
     }
 }
@@ -118,12 +121,15 @@ void LinkedList::removeAtIndex(int index) {
 
 
 void LinkedList::insertAtIndex(int v, int index) {
+    // validate the index before insert
+    // if index less than 0 throw error
     if (index < 0 || index > length)
         throw std::out_of_range("Index out of range");
-
+    // if index == 0 then insert as a first node
     if (index == 0) {
         headPtr = new Node(v, headPtr);
-    } else {
+    } else  
+    {
         Node* prev = headPtr;
         for (int i = 0; i < index - 1; ++i) {
             prev = prev->next;
@@ -132,6 +138,17 @@ void LinkedList::insertAtIndex(int v, int index) {
     }
     length++;
 }
+
+// to able to insert the node to the specific index 
+    // we need to pass a node->value , index 
+        // first step is to check if the index < 0 ? throw error
+        // if index = 0 ? insert as the first node
+        // else >> 
+            // allocate a new node name prev point to the head pointer to start
+            // loop thru the list to find a desire index to insert
+                //start from index 0 , stop at indexInput - 1
+                // assign a prev node to point to next node at current index
+           // when found the desire index then create new node 
 
 int LinkedList::count(int v) const {
     int count = 0;
@@ -184,9 +201,3 @@ Node* LinkedList::sortHelper(Node* first) {
     return dummy.next;
 }
 
-
-//digit n sum up to target 
-bool operator>(const Point& o) const{
-   return o < *this;
-}
- 

@@ -10,7 +10,6 @@ class IntBinaryTree{
             TreeNode* right;    // Pointer to right child node
         };
 
-       
         TreeNode* root;         // Pointer to the root node
 
         // Private member functions
@@ -21,6 +20,7 @@ class IntBinaryTree{
         void displayInOrder(TreeNode*) const;
         void displayPreOrder(TreeNode*) const;
         void displayPostOrder(TreeNode*) const;
+        bool isFull(TreeNode*) const;
 
     public:
         // Constructor
@@ -49,9 +49,10 @@ class IntBinaryTree{
         void displayPostOrder() const{
             displayPostOrder(root);
         }
-        // Helper function 
-        int getRootValue();
-        bool isEmpty();
+        // non-recursive insert node function
+        void newInsertNode(int);
+
+        bool isFull() const;
 };
 
 #endif

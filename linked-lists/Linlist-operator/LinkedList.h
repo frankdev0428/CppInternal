@@ -92,6 +92,7 @@ public:
 // this function actually loop thru array 
   int count(int v) const; // count number of occurrences of v
   Node* sortHelper(Node* first);
+  
 };
 
 #endif
