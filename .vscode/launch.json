@@ -6,8 +6,8 @@
       "type": "lldb",
       "request": "launch",
       "args": [],
-      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/binarySearchTree/BST-operation ",
-      "program": "/Users/frankdev0428/Desktop/Working/c++-project/binarySearchTree/BST-operation /build/Debug/outDebug"
+      "cwd": "/Users/frankdev0428/Desktop/Working/c++-project/Hash-fuunction/hashTable-01",
+      "program": "/Users/frankdev0428/Desktop/Working/c++-project/Hash-fuunction/hashTable-01/build/Debug/outDebug"
     }
   ]
 }

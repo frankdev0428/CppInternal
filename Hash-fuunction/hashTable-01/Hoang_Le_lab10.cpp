@@ -21,16 +21,14 @@ int main() {
     int a,b;
     cout << "Enter a value for a: ";
     cin >> a;
-    cout << "Enter value for a: ";
-    cin >> a;
-
-    cout << "Enter vale for b: ";
+      cout << "Enter vale for b: ";
     cin >> b;
     
     int number; 
     // Read a file and hash values 
     while (inputFile>> number)
     {
+        // Apply universal hash funciton formula 
         int index = (a * number + b) % TABLE_SIZE;
         hashTable[index]++;
     }
@@ -57,8 +55,7 @@ int main() {
 
    cout << endl;
    cout << "Location with the most insertions: " << endl;
-   cout << "Location " << maxLocation
-     << " with " << maxInsertions << " insertions" << endl;
+   cout << "Location " << maxLocation << " with " << maxInsertions << " insertions" << endl;
 
      return 0;
 }
