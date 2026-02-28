@@ -1,0 +1,252 @@
+// Specification file for the List class
+#ifndef LIST_H
+#define LIST_H
+
+#include <string>
+
+class List{
+    private:
+    // Declare a structure for the list
+        struct ListNode{
+            int key;            // The key in this node
+            std::string value;  // The value in this node
+            ListNode* next;     // To point to the next node
+        };
+
+        ListNode* head;         // List head pointer
+
+    public:
+        // Constructor
+        List(){
+            head = nullptr;
+        }
+        // Destructor
+        ~List();
+
+        // Linkedin List operations
+        void insertNode(int, std::string);
+        bool deleteNode(int);
+        std::string search(int);
+};
+#endif
+------ 
+
+// Implementation file for the NumberList class
+#include <iostream>
+#include <string>
+#include "List.h"
+
+// insertNode member function:
+void List::insertNode(int key, std::string value){
+
+    // Allocate a new node and store key and value there.
+    ListNode* newNode = new ListNode;
+    newNode->key = key;
+    newNode->value = value;
+    newNode->next = nullptr;
+
+    // Insert the newNode at the beginning of the list
+    newNode->next = head;
+    head = newNode;
+}
+
+// deleteNode member function
+// It returns true if deletion is successful,
+// false otherwise.
+bool List::deleteNode(int key){
+    ListNode* nodePtr;          // To traverse the list
+    ListNode* previousNode;     // To point to the previous node 
+
+    // If the list is empty, do nothing.
+    if (!head){
+        return false;
+    }
+    // Determine if the first node is the one.
+    if (head->key == key){
+        nodePtr = head->next;
+        delete head;
+        head = nodePtr;
+        return true;
+    }
+    else{
+        // Initialize nodePtr to head of list
+        nodePtr = head;
+        // Skip all nodes whose key member is 
+        // not equal to key.
+        while (nodePtr != nullptr && nodePtr->key != key){
+            previousNode = nodePtr;
+            nodePtr = nodePtr->next;
+        }
+        // If nodePtr is not at the end of the list,
+        // link the previous node to the node after
+        // nodePtr, then delete nodePtr.
+        if (nodePtr){
+            previousNode->next = nodePtr->next;
+            delete nodePtr;
+            return true;
+        }
+    }
+    return false;
+}
+
+// search member function
+// It returns the item's string value if found.
+// Returns an empty string otherwise.
+std::string List::search(int key){
+    ListNode* nodePtr = head;
+
+    while (nodePtr){
+        // Item with the matching key found
+        if (nodePtr->key == key){
+            return nodePtr->value;
+        }
+        nodePtr = nodePtr->next;
+    }
+
+    // Item not found
+    return "";
+}
+
+// The destructor
+List::~List(){
+    ListNode* nodePtr;      // To traverse the list
+    ListNode* nextNode;     // To point to the next node
+
+    // Position nodePtr at the head of the list.
+    nodePtr = head;
+
+    // While nodePtr is not at the end of the list...
+    while (nodePtr != nullptr){
+        // Save a pointer to the next node.
+        nextNode = nodePtr->next;
+
+        // Delete the current node.
+        delete nodePtr;
+
+        // Position nodePtr at the next node.
+        nodePtr = nextNode;
+    }
+}
+
+------
+// Specification file for the HashTable class
+#ifndef HASHTABLE_H
+#define HASHTABLE_H
+
+#include <vector>
+#include <string>
+#include "List.h"
+
+class HashTable{
+    private:
+        int numOfItems, capacity;
+        std::vector<List> hashT;
+
+        // Private universal hash function
+        int hashFunction(int key){
+            // a and b can be changed.
+            int a = 7;
+            int b = 4;
+
+            return (a*key + b) % capacity;
+        }
+
+    public:
+        // Constructor
+        HashTable(int capacity = 101){
+            this->capacity = capacity;
+            numOfItems = 0;
+            hashT.resize(capacity);
+        }
+
+        // Getter
+        int getNumofItems() const{
+            return numOfItems;
+        }
+
+        // Hash Table operations
+        void insert(int, std::string);
+        void deleteKey(int);
+        std::string lookup(int);
+};
+
+#endif
+
+---- 
+// Implementation file for the HashTable class
+#include <iostream>
+#include <string>
+#include "HashTable.h"
+
+// insert member function: O(1)
+void HashTable::insert(int key, std::string value){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    hashT[location].insertNode(key, value);
+
+    numOfItems++;
+}
+
+// delete member function: O(1 + L(x))
+void HashTable::deleteKey(int key){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    if (hashT[location].deleteNode(key)){
+        numOfItems--;
+    }
+}
+
+// lookup member function: O(1 + L(x))
+std::string HashTable::lookup(int key){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    std::string result = hashT[location].search(key);
+
+    // result will be an empty string if item not found.
+    return result;
+}
+
+. (10 pts) Download List.h Download List.h, List.cpp Download List.cpp, HashTable.h Download HashTable.h, and HashTable.cpp Download HashTable.cpp, which implement a Hash Table with separate chaining (covered in lecture).
+
+Write the following additional member functions to the List class:
+
+getSize: a public function that returns the size of the linked list.
+displayList: a public function that displays the content in the linked list. (See the sample output below for the output format.)
+In addition, write the following additional member functions to the HashTable class:
+
+generateCoeffs: a private member function that randomly generates the a and b coefficients to be used in the universal hash function (h(x) = ax + b (mod p)). The range for a is [1, capacity) and the range for b is [0, capacity) (For both, up to but not including capacity). This function will be called in the constructor.
+p doesn't need to be randomly generated. It is the hash table's capacity. 
+Modify hashFunction accordingly. 
+For convenience, you can create private member variables for the coefficients a and b inside the class.
+Make sure that different random numbers are generated each time this function is called.
+getLocationSize: a public member function that receives an integer argument for the location index and returns the value from calling the getSize function at that location.
+displayLocation: a public member function that receives an integer argument for the location index and calls the displayList function at that location.
+You are free to add additional helper functions in the HashTable class if needed.
+
+ 
+
+Write a separate C++ program that will execute the following tasks:
+
+Use the updated List and HashTable class to create a hash table of size 101.
+Open the text file data.txt Download data.txt. This text file contains 100 records. Each record is on a separate line and follows the format: (integer)key (string)value.
+Make sure to perform proper file-opening checking and file-closing operations.
+Hash all the records into the hash table.
+After all the records have been inserted:
+Determine which location had the most collisions. Display that location and all the records inserted at that location. (If there is more than one location with the most collisions, displaying any of them is fine.)
+ 
+
+Sample output (universal hash function used: h(x) = 29x + 43 (mod 101)):
+
+--- Hash Table Report ---
+Total records processed: 100
+Location with the most collisions: Index 5
+Number of records at this location: 4
+Records at this location: [3875: Nineteen_Eighty_Four] [3269: Jane_Eyre] [4178: The_Rainbow] [8723: Nostromo]
+Please name the header file FirstName_LastName_List.h, FirstName_LastName_HashTable.h.
+
+Please name the class implementation file FirstName_LastName_List.cpp, FirstName_LastName_HashTable.cpp.
+
+Please name the main program cpp file FirstName_LastName_lab11.cpp.

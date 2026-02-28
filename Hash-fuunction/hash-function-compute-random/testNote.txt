@@ -1,0 +1,371 @@
+
+	1.	✅ Updated List class (with getSize() and displayList())
+	2.	✅ Updated HashTable class (with generateCoeffs(), etc.)
+	3.	✅ A complete main() program
+	4.	✅ Clear explanations with comments
+	5.	✅ Matches assignment requirements
+
+⸻
+
+✅ 1️⃣ Updated List Class
+
+⸻
+
+📄 FirstName_LastName_List.h
+
+#ifndef FIRSTNAME_LASTNAME_LIST_H
+#define FIRSTNAME_LASTNAME_LIST_H
+
+#include <string>
+#include <iostream>
+
+class List{
+private:
+    struct ListNode{
+        int key;
+        std::string value;
+        ListNode* next;
+    };
+
+    ListNode* head;
+
+public:
+    // Constructor
+    List(){
+        head = nullptr;
+    }
+
+    // Destructor
+    ~List();
+
+    // Existing operations
+    void insertNode(int, std::string);
+    bool deleteNode(int);
+    std::string search(int);
+
+    // NEW REQUIRED FUNCTIONS
+    int getSize();          // returns number of nodes in list
+    void displayList();     // displays content of list
+};
+
+#endif
+
+
+⸻
+
+📄 FirstName_LastName_List.cpp
+
+#include "FirstName_LastName_List.h"
+
+// Insert at head (O(1))
+void List::insertNode(int key, std::string value){
+    ListNode* newNode = new ListNode;
+
+    newNode->key = key;
+    newNode->value = value;
+    newNode->next = head;
+
+    head = newNode;
+}
+
+// Delete node
+bool List::deleteNode(int key){
+    if (!head)
+        return false;
+
+    if (head->key == key){
+        ListNode* temp = head;
+        head = head->next;
+        delete temp;
+        return true;
+    }
+
+    ListNode* current = head;
+    ListNode* previous = nullptr;
+
+    while (current && current->key != key){
+        previous = current;
+        current = current->next;
+    }
+
+    if (current){
+        previous->next = current->next;
+        delete current;
+        return true;
+    }
+
+    return false;
+}
+
+// Search
+std::string List::search(int key){
+    ListNode* current = head;
+
+    while (current){
+        if (current->key == key)
+            return current->value;
+
+        current = current->next;
+    }
+
+    return "";
+}
+
+// 🔹 NEW: getSize()
+int List::getSize(){
+    int count = 0;
+    ListNode* current = head;
+
+    while (current){
+        count++;
+        current = current->next;
+    }
+
+    return count;
+}
+
+// 🔹 NEW: displayList()
+void List::displayList(){
+    ListNode* current = head;
+
+    while (current){
+        std::cout << "[" << current->key << ": "
+                  << current->value << "] ";
+        current = current->next;
+    }
+    std::cout << std::endl;
+}
+
+// Destructor
+List::~List(){
+    ListNode* current = head;
+
+    while (current){
+        ListNode* nextNode = current->next;
+        delete current;
+        current = nextNode;
+    }
+}
+
+
+⸻
+
+✅ 2️⃣ Updated HashTable Class
+
+⸻
+
+📄 FirstName_LastName_HashTable.h
+
+#ifndef FIRSTNAME_LASTNAME_HASHTABLE_H
+#define FIRSTNAME_LASTNAME_HASHTABLE_H
+
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+#include "FirstName_LastName_List.h"
+
+class HashTable{
+private:
+    int numOfItems;
+    int capacity;
+    int a;      // coefficient a
+    int b;      // coefficient b
+
+    std::vector<List> hashT;
+
+    // Generate random coefficients
+    void generateCoeffs();
+
+    // Universal hash function
+    int hashFunction(int key);
+
+public:
+    HashTable(int capacity = 101);
+
+    int getNumOfItems() const;
+
+    void insert(int, std::string);
+    void deleteKey(int);
+    std::string lookup(int);
+
+    // NEW REQUIRED FUNCTIONS
+    int getLocationSize(int index);
+    void displayLocation(int index);
+};
+
+#endif
+
+
+⸻
+
+📄 FirstName_LastName_HashTable.cpp
+
+#include "FirstName_LastName_HashTable.h"
+
+// Constructor
+HashTable::HashTable(int capacity){
+    this->capacity = capacity;
+    numOfItems = 0;
+    hashT.resize(capacity);
+
+    generateCoeffs();   // generate random a and b
+}
+
+// Generate random coefficients
+void HashTable::generateCoeffs(){
+    srand(time(0));  // ensure different random each run
+
+    a = rand() % (capacity - 1) + 1;  // [1, capacity)
+    b = rand() % capacity;            // [0, capacity)
+}
+
+// Universal hash function
+int HashTable::hashFunction(int key){
+    return (a * key + b) % capacity;
+}
+
+int HashTable::getNumOfItems() const{
+    return numOfItems;
+}
+
+// Insert
+void HashTable::insert(int key, std::string value){
+    int location = hashFunction(key);
+
+    hashT[location].insertNode(key, value);
+    numOfItems++;
+}
+
+// Delete
+void HashTable::deleteKey(int key){
+    int location = hashFunction(key);
+
+    if (hashT[location].deleteNode(key)){
+        numOfItems--;
+    }
+}
+
+// Lookup
+std::string HashTable::lookup(int key){
+    int location = hashFunction(key);
+    return hashT[location].search(key);
+}
+
+// 🔹 NEW: getLocationSize()
+int HashTable::getLocationSize(int index){
+    return hashT[index].getSize();
+}
+
+// 🔹 NEW: displayLocation()
+void HashTable::displayLocation(int index){
+    hashT[index].displayList();
+}
+
+
+⸻
+
+✅ 3️⃣ Main Program
+
+⸻
+
+📄 FirstName_LastName_lab11.cpp
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include "FirstName_LastName_HashTable.h"
+
+int main(){
+
+    HashTable ht(101);
+
+    std::ifstream file("data.txt");
+
+    if (!file){
+        std::cout << "Error opening file." << std::endl;
+        return 1;
+    }
+
+    int key;
+    std::string value;
+
+    int totalRecords = 0;
+
+    // Read file
+    while (file >> key >> value){
+        ht.insert(key, value);
+        totalRecords++;
+    }
+
+    file.close();
+
+    // Find location with most collisions
+    int maxIndex = 0;
+    int maxSize = 0;
+
+    for (int i = 0; i < 101; i++){
+        int size = ht.getLocationSize(i);
+
+        if (size > maxSize){
+            maxSize = size;
+            maxIndex = i;
+        }
+    }
+
+    // Display report
+    std::cout << "--- Hash Table Report ---" << std::endl;
+    std::cout << "Total records processed: "
+              << totalRecords << std::endl;
+
+    std::cout << "Location with the most collisions: Index "
+              << maxIndex << std::endl;
+
+    std::cout << "Number of records at this location: "
+              << maxSize << std::endl;
+
+    std::cout << "Records at this location: ";
+    ht.displayLocation(maxIndex);
+
+    return 0;
+}
+
+
+⸻
+
+🔥 How Everything Works Together
+
+1️⃣ File is read
+
+Each line:
+
+key value
+
+2️⃣ Insert into hash table
+
+Hash function:
+
+h(x) = ax + b mod 101
+
+3️⃣ Collisions stored using linked lists
+
+4️⃣ After inserting 100 records
+
+We:
+	•	Loop through all 101 buckets
+	•	Find largest list
+	•	Display that bucket
+
+⸻
+
+🎯 What Your Professor Is Testing
+
+You understand:
+	•	Separate chaining
+	•	Universal hashing
+	•	Linked list integration
+	•	File I/O
+	•	Traversal and counting
+	•	Collision analysis
+
+⸻
