@@ -1,7 +1,7 @@
 // Implementation file for the HashTable class
 #include <iostream>
 #include <string>
-#include "HashTable.h"
+#include "Hoang_Le_HashTable.h"
 
 // insert member function: O(1)
 void HashTable::insert(int key, std::string value){
