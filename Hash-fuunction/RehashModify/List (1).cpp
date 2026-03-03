@@ -95,3 +95,13 @@ List::~List(){
     }
 }
 
+int List::getSize() const {
+    int count = 0;
+    ListNode* nodePtr = head;
+
+    while(nodePtr){
+        count++;
+        nodePtr = nodeptr->next;
+    }
+    return count;
+}

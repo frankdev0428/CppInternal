@@ -1,7 +1,6 @@
 // Specification file for the List class
 #ifndef LIST_H
 #define LIST_H
-
 #include <string>
 
 class List{
@@ -27,6 +26,13 @@ class List{
         void insertNode(int, std::string);
         bool deleteNode(int);
         std::string search(int);
+        // Return head pointer (for rehash traversal)
+        ListNode* getHead() const{
+            return head;
+        }
+     // Count number of nodes in this list
+     int getSize() const;
+     
 };
 #endif
 
