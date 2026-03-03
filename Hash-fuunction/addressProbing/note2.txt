@@ -1,0 +1,268 @@
+
+
+
+🔥 WHAT YOU MUST ADD (BOTH CLASSES)
+
+You must add:
+
+New private variables:
+
+long totalProbeCount;
+int maxProbeCount;
+
+New public functions:
+
+double getLoadFactor() const;
+long getTotalProbeCount() const;
+int getMaxProbeCount() const;
+
+And modify insert() to:
+	•	Count probes
+	•	Track max probes for one insert
+
+⸻
+
+✅ STEP 1 — MODIFY LinearPHashTable.h
+
+Add inside private section:
+
+long totalProbeCount;
+int maxProbeCount;
+
+Modify constructor:
+
+LinearPHashTable(int capacity = 101){
+    this->capacity = capacity;
+    numOfItems = 0;
+    totalProbeCount = 0;
+    maxProbeCount = 0;
+
+    hashT.resize(capacity);
+    generateCoeffs();
+}
+
+Add getters in public section:
+
+double getLoadFactor() const {
+    return (double)numOfItems / capacity;
+}
+
+long getTotalProbeCount() const {
+    return totalProbeCount;
+}
+
+int getMaxProbeCount() const {
+    return maxProbeCount;
+}
+
+
+⸻
+
+✅ STEP 2 — MODIFY LinearPHashTable.cpp (insert function)
+
+Replace insert() with:
+
+void LinearPHashTable::insert(int key, std::string value)
+{
+    int location = hashFunction(key);
+    Item* temp = new Item(key, value);
+
+    int probeCountForThisInsert = 1;  // first attempt
+
+    while(hashT[location] != NULL &&
+          hashT[location]->key != -1 &&
+          hashT[location]->key != key)
+    {
+        totalProbeCount++;
+        probeCountForThisInsert++;
+
+        location = (location + 1) % capacity;
+    }
+
+    if (hashT[location] == NULL || hashT[location]->key == -1)
+        numOfItems++;
+
+    hashT[location] = temp;
+
+    totalProbeCount++;
+    
+    if (probeCountForThisInsert > maxProbeCount)
+        maxProbeCount = probeCountForThisInsert;
+}
+
+
+⸻
+
+✅ STEP 3 — MODIFY QuadPHashTable.h
+
+Add same variables:
+
+long totalProbeCount;
+int maxProbeCount;
+
+Modify constructor:
+
+QuadPHashTable(int capacity = 101){
+    this->capacity = capacity;
+    numOfItems = 0;
+    totalProbeCount = 0;
+    maxProbeCount = 0;
+
+    hashT.resize(capacity);
+    generateCoeffs();
+}
+
+Add getters:
+
+double getLoadFactor() const {
+    return (double)numOfItems / capacity;
+}
+
+long getTotalProbeCount() const {
+    return totalProbeCount;
+}
+
+int getMaxProbeCount() const {
+    return maxProbeCount;
+}
+
+
+⸻
+
+✅ STEP 4 — MODIFY QuadPHashTable.cpp (insert)
+
+Replace insert() with:
+
+void QuadPHashTable::insert(int key, std::string value)
+{
+    int base = hashFunction(key);
+    int location = base;
+
+    Item* temp = new Item(key, value);
+
+    int counter = 0;
+    int probeCountForThisInsert = 1;
+
+    while(hashT[location] != NULL &&
+          hashT[location]->key != -1 &&
+          hashT[location]->key != key)
+    {
+        totalProbeCount++;
+        counter++;
+        probeCountForThisInsert++;
+
+        location = (base + counter * counter) % capacity;
+    }
+
+    if (hashT[location] == NULL || hashT[location]->key == -1)
+        numOfItems++;
+
+    hashT[location] = temp;
+
+    totalProbeCount++;
+
+    if (probeCountForThisInsert > maxProbeCount)
+        maxProbeCount = probeCountForThisInsert;
+}
+
+
+⸻
+
+✅ STEP 5 — MAIN PROGRAM
+
+Create Main.cpp:
+
+#include <iostream>
+#include <fstream>
+#include "LinearPHashTable.h"
+#include "QuadPHashTable.h"
+
+using namespace std;
+
+int main()
+{
+    LinearPHashTable linear151(151);
+    LinearPHashTable linear211(211);
+
+    QuadPHashTable quad151(151);
+    QuadPHashTable quad211(211);
+
+    ifstream file("cityData.txt");
+
+    if (!file)
+    {
+        cout << "Error opening file." << endl;
+        return 1;
+    }
+
+    int key;
+    string value;
+
+    while (file >> key >> value)
+    {
+        linear151.insert(key, value);
+        linear211.insert(key, value);
+        quad151.insert(key, value);
+        quad211.insert(key, value);
+    }
+
+    file.close();
+
+    cout << "--- Hash Table Report ---" << endl;
+
+    cout << "\nLinear Probing (Size 151):" << endl;
+    cout << "- Load Factor: " << linear151.getLoadFactor() << endl;
+    cout << "- Total Probe Count: " << linear151.getTotalProbeCount() << endl;
+    cout << "- Max Probe Count for one item: " << linear151.getMaxProbeCount() << endl;
+
+    cout << "\nLinear Probing (Size 211):" << endl;
+    cout << "- Load Factor: " << linear211.getLoadFactor() << endl;
+    cout << "- Total Probe Count: " << linear211.getTotalProbeCount() << endl;
+    cout << "- Max Probe Count for one item: " << linear211.getMaxProbeCount() << endl;
+
+    cout << "\nQuadratic Probing (Size 151):" << endl;
+    cout << "- Load Factor: " << quad151.getLoadFactor() << endl;
+    cout << "- Total Probe Count: " << quad151.getTotalProbeCount() << endl;
+    cout << "- Max Probe Count for one item: " << quad151.getMaxProbeCount() << endl;
+
+    cout << "\nQuadratic Probing (Size 211):" << endl;
+    cout << "- Load Factor: " << quad211.getLoadFactor() << endl;
+    cout << "- Total Probe Count: " << quad211.getTotalProbeCount() << endl;
+    cout << "- Max Probe Count for one item: " << quad211.getMaxProbeCount() << endl;
+
+    // Comparison
+    if (quad151.getTotalProbeCount() < linear151.getTotalProbeCount())
+        cout << "\nQuadratic probing performs better for size 151." << endl;
+    else
+        cout << "\nLinear probing performs better for size 151." << endl;
+
+    if (quad211.getTotalProbeCount() < linear211.getTotalProbeCount())
+        cout << "Quadratic probing performs better for size 211." << endl;
+    else
+        cout << "Linear probing performs better for size 211." << endl;
+
+    return 0;
+}
+
+
+⸻
+
+✅ HOW TO COMPILE
+
+g++ -std=c++17 Main.cpp LinearPHashTable.cpp QuadPHashTable.cpp -o program
+./program
+
+
+⸻
+
+🎯 WHAT PROFESSOR IS TESTING
+
+They are testing:
+	1.	Understanding of load factor
+	2.	Difference between linear vs quadratic clustering
+	3.	Probe counting
+	4.	Performance comparison
+	5.	Why larger table → fewer probes
+
+⸻
+

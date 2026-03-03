@@ -1,0 +1,364 @@
+item.h 
+// Class representing a single item in the hash table
+#ifndef ITEM_H
+#define ITEM_H
+
+#include <string>
+
+class Item{
+    public:
+        int key;
+        std::string value;
+
+    // Constructor
+    Item(int k = -1, std::string v = ""){
+        key = k;
+        value = v;
+    }
+};
+
+#endif
+
+LinearPHashTable.cpp 
+// Specification file for the HashTable class
+// with Linear Probing
+#ifndef LINEARPHASHTABLE_H
+#define LINEARPHASHTABLE_H
+
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include "Item.h"
+
+
+
+class LinearPHashTable{
+    private:
+        int numOfItems, capacity;
+        std::vector<Item*> hashT;
+        int a, b;   // Coefficients
+// void HashTable::generateCoeffs(){
+//     srand(time(0)); //ensure different random each run
+
+//     a = rand() % (capacity - 1) + 1; //[1, capacity]
+//     b = rand() % capacity;           // [0, capacity]
+//  }
+        void generateCoeffs() {
+           srand(time(0)); // ensure different random each run;
+            a = rand() % (capacity - 1) + 1; // [1,capacity]
+            b = rand() % capacity;  // [0,capacity];
+        }
+
+        int hashFunction(int key) {
+            return (a * key + b) % capacity;
+        }
+
+    public:
+        // Constructor
+        LinearPHashTable(int capacity = 101){
+            this->capacity = capacity;
+            numOfItems = 0;
+            hashT.resize(capacity);
+            generateCoeffs();
+        }
+
+        // Getters
+        int getNumofItems() const{
+            return numOfItems;
+        }
+        int getCapacity() const{
+            return capacity;
+        }
+
+        // Hash Table operations
+        void insert(int, std::string);
+        std::string deleteKey(int);
+        std::string lookup(int);
+
+        // Display all items in the hash table
+        void display();
+        // get load factor from the input table numbers 
+        double getLoadFactor() const {
+         return (double)numOfItems / capacity;
+         }
+};
+
+#endif
+
+
+LinearHashTable.cpp 
+// Implementation file for the HashTable class
+#include <iostream>
+#include <string>
+#include "LinearPHashTable.h"
+
+// insert member function
+void LinearPHashTable::insert(int key, std::string value){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    Item* temp = new Item(key, value);
+    int counter = 0;
+ 
+    // Linear probing to find an empty or deleted slot
+    // Continue to probe when the slot is not empty or deleted,
+    // and the key at the slot is NOT our key.
+    while(hashT[location] != NULL &&
+          hashT[location]->key != -1 && 
+          hashT[location]->key != key){
+        
+        // Have already searched the entire hash table, stop.
+        if (counter++ >= capacity)
+            return;
+
+        // Linear probing
+        location = (location + 1) % capacity;
+    }
+
+    // if inserting into empty or deleted slot, increase numOfItems.
+    if (hashT[location] == NULL || hashT[location]->key == -1)
+        numOfItems++;
+
+    hashT[location] = temp;
+}
+
+// delete member function
+// It returns the value of the deleted item if found
+std::string LinearPHashTable::deleteKey(int key){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    int counter = 0;
+
+    // Linear probing to find the key
+    while(hashT[location] != NULL){
+
+        // Key not found
+        if (counter++ >= capacity)
+            return "";
+
+        if (hashT[location]->key == key){
+            std::string data = hashT[location]->value;
+
+            // Mark the location empty
+            hashT[location]->key = -1;
+            hashT[location]->value = "";
+
+            numOfItems--;
+            return data;
+        }
+
+        // Linear probing
+        location = (location + 1) % capacity;
+    }
+    
+    return "";
+}
+
+// lookup member function
+std::string LinearPHashTable::lookup(int key){
+    // Find the key's location using the hash function
+    int location = hashFunction(key);
+
+    int counter = 0;
+
+    // Linear probing to find the key
+    while(hashT[location] != NULL){
+
+        // Key not found
+        if (counter++ >= capacity)
+            return "";  
+
+        if (hashT[location]->key == key)
+            return hashT[location]->value;
+
+        // Linear probing
+        location = (location + 1) % capacity;
+    }
+
+    return "";
+}
+
+// Display all items in the hash table
+void LinearPHashTable::display(){
+    for (int i = 0; i < capacity; i++){
+        if (hashT[i] != NULL && hashT[i]->key != -1)
+            std::cout << "[" << hashT[i]->key << ": " 
+            << hashT[i]->value << "]" << std::endl;
+    }
+}
+
+QuadPHashTable.hash
+// Specification file for the HashTable class
+// with Quadratic Probing
+#ifndef QUADPHASHTABLE_H
+#define QUADPHASHTABLE_H
+
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include "Item.h"
+
+
+// Modify the generateCoeffs function to randomly generate the a and b coefficients to be used in the universal hash function. The range for a is [1, capacity) and the range for b is [0, capacity). (We implemented this in assignments last week.)
+// getLoadFactor: a public function that returns the load factor of the hash table (ratio of the number of elements in the table to the table size).
+// Add a new member variable to track the total number of probes the hash table has taken when inserting elements. Modify the insert function to update the probe count whenever a new probing attempt is performed. 
+// getTotalProbeCount: a public function that returns the total number of probes the hash table has taken. 
+// Add a new member variable to track the maximum number of probes taken for a single insert in the hash table. Modify the insert function to update this member variable when needed.
+// getMaxProbeCount: a public function that returns the maximum number of probes taken for a single insert. 
+
+
+class QuadPHashTable{
+    private:
+        int numOfItems, capacity;
+        std::vector<Item*> hashT;
+
+        int a, b;   // Coefficients
+
+        void generateCoeffs() {
+           srand(time(0)); // ensure different random each run;
+            a = rand() % (capacity - 1) + 1; // [1,capacity]
+            b = rand() % capacity;  // [0,capacity];
+        }
+
+        int hashFunction(int key) {
+            return (a * key + b) % capacity;
+        }
+
+    public:
+        // Constructor
+        QuadPHashTable(int capacity = 101){
+            this->capacity = capacity;
+            numOfItems = 0;
+            hashT.resize(capacity);
+            generateCoeffs();
+        }
+
+        // Getters
+        int getNumofItems() const{
+            return numOfItems;
+        }
+        int getCapacity() const{
+            return capacity;
+        }
+
+        // Hash Table operations
+        void insert(int, std::string);
+        std::string deleteKey(int);
+        std::string lookup(int);
+
+        // Display all items in the hash table
+        void display();
+         // get load factor from the input table numbers 
+        double getLoadFactor() const {
+         return (double)numOfItems / capacity;
+         }
+};
+
+#endif
+
+QuadPHashTable.cpp 
+// Implementation file for the HashTable class
+#include <iostream>
+#include <string>
+#include "QuadPHashTable.h"
+
+// insert member function
+void QuadPHashTable::insert(int key, std::string value){
+    // Find the key's location using the hash function
+    int base = hashFunction(key);
+    int location = base;
+
+    Item* temp = new Item(key, value);
+    int counter = 0;
+
+    // Quadratic probing to find an empty or deleted slot
+    // Continue to probe when the slot is not empty or deleted,
+    // and the key at the slot is NOT our key.
+    while(hashT[location] != NULL &&
+          hashT[location]->key != -1 && 
+          hashT[location]->key != key){
+        
+        // Have already searched the entire hash table, stop.
+        if (counter++ >= capacity)
+            return;
+
+        // Quadratic probing
+        location = (base + counter * counter) % capacity;
+    }
+
+    // if inserting into empty or deleted slot, increase numOfItems.
+    if (hashT[location] == NULL || hashT[location]->key == -1)
+        numOfItems++;
+
+    hashT[location] = temp;
+}
+
+// delete member function
+// It returns the value of the deleted item if found
+std::string QuadPHashTable::deleteKey(int key){
+    // Find the key's location using the hash function
+    int base = hashFunction(key);
+    int location = base;
+
+    int counter = 0;
+
+    // Quadratic probing to find the key
+    while(hashT[location] != NULL){
+
+        // Key not found
+        if (counter++ >= capacity)
+            return "";
+
+        if (hashT[location]->key == key){
+            std::string data = hashT[location]->value;
+
+            // Mark the location empty
+            hashT[location]->key = -1;
+            hashT[location]->value = "";
+
+            numOfItems--;
+            return data;
+        }
+
+        // Quadratic probing
+        location = (base + counter * counter) % capacity;
+    }
+    
+    return "";
+}
+
+// lookup member function
+std::string QuadPHashTable::lookup(int key){
+    // Find the key's location using the hash function
+    int base = hashFunction(key);
+    int location = base;
+
+    int counter = 0;
+
+    // Quadratic probing to find the key
+    while(hashT[location] != NULL){
+
+        // Key not found
+        if (counter++ >= capacity)
+            return "";  
+
+        if (hashT[location]->key == key)
+            return hashT[location]->value;
+
+        // Quadratic probing
+        location = (base + counter * counter) % capacity;
+    }
+
+    return "";
+}
+
+// Display all items in the hash table
+void QuadPHashTable::display(){
+    for (int i = 0; i < capacity; i++){
+        if (hashT[i] != NULL && hashT[i]->key != -1)
+            std::cout << "[" << hashT[i]->key << ": " 
+            << hashT[i]->value << "]" << std::endl;
+    }
+}
+

@@ -12,7 +12,8 @@ void HashTable::insert(int key, std::string value){
 
     numOfItems++;
 }
-  
+
+void getNumberRehash tv 
 // delete member function: O(1 + L(x))
 void HashTable::deleteKey(int key){
     // Find the key's location using the hash function
@@ -58,5 +59,4 @@ void HashTable::rehash(int newSize){
       nodePtr = nodePtr->next;
      }
   }
-
 }
