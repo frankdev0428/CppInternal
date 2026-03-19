@@ -131,6 +131,7 @@ void LinkedList::insertAtIndex(int v, int index) {
     } else  
     {
         Node* prev = headPtr;
+        //use loop to find the Node before target Node
         for (int i = 0; i < index - 1; ++i) {
             prev = prev->next;
         }

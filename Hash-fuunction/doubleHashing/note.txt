@@ -1,0 +1,159 @@
+Perfect 👍
+You only need to modify insert() and lookup() to:
+	•	Track total insert probe count
+	•	Track total search probe count
+	•	Keep everything else unchanged
+	•	Include clear comments
+
+Assuming you already added in the header:
+
+long totalInsertProbeCount;
+long totalSearchProbeCount;
+
+Now here is your modified .cpp file (only required changes).
+
+⸻
+
+✅ Modified DoubleHHashTable.cpp
+
+// Implementation file for the HashTable class
+#include <iostream>
+#include <string>
+#include "DoubleHHashTable.h"
+
+// insert member function
+void DoubleHHashTable::insert(int key, std::string value){
+    // Find the key's location using hash function #1
+    int base = hash1(key);
+    int location = base;
+
+    // Find the probing distance using hash function #2
+    int step = hash2(key);
+
+    Item* temp = new Item(key, value);
+    int counter = 0;
+
+    // Each insertion attempt counts as at least one probe
+    // We count probes whenever we attempt to check a slot
+    while(hashT[location] != NULL &&
+          hashT[location]->key != -1 && 
+          hashT[location]->key != key){
+        
+        // Increment total insert probe counter
+        totalInsertProbeCount++;
+
+        // Have already searched the entire hash table, stop.
+        if (counter++ >= capacity)
+            return;
+
+        // Double hashing probing formula
+        location = (base + counter * step) % capacity;
+    }
+
+    // Count the final successful probe attempt
+    totalInsertProbeCount++;
+
+    // If inserting into empty or deleted slot, increase numOfItems
+    if (hashT[location] == NULL || hashT[location]->key == -1)
+        numOfItems++;
+
+    hashT[location] = temp;
+}
+
+// delete member function
+// (No modification required for this lab)
+std::string DoubleHHashTable::deleteKey(int key){
+    int base = hash1(key);
+    int location = base;
+    int step = hash2(key);
+    int counter = 0;
+
+    while(hashT[location] != NULL){
+
+        if (counter++ >= capacity)
+            return "";
+
+        if (hashT[location]->key == key){
+            std::string data = hashT[location]->value;
+
+            hashT[location]->key = -1;
+            hashT[location]->value = "";
+
+            numOfItems--;
+            return data;
+        }
+
+        location = (base + counter * step) % capacity;
+    }
+    return "";
+}
+
+// lookup member function
+std::string DoubleHHashTable::lookup(int key){
+    // Find the key's location using hash function #1
+    int base = hash1(key);
+    int location = base;
+
+    // Find the probing distance using hash function #2
+    int step = hash2(key);
+
+    int counter = 0;
+
+    // Double hashing search
+    while(hashT[location] != NULL){
+
+        // Increment total search probe counter
+        totalSearchProbeCount++;
+
+        // If key found, return value
+        if (hashT[location]->key == key)
+            return hashT[location]->value;
+
+        // If searched entire table, stop
+        if (counter++ >= capacity)
+            return "";
+
+        // Continue probing using double hashing
+        location = (base + counter * step) % capacity;
+    }
+
+    return "";
+}
+
+// Display all items in the hash table
+void DoubleHHashTable::display(){
+    for (int i = 0; i < capacity; i++){
+        if (hashT[i] != NULL && hashT[i]->key != -1)
+            std::cout << "[" << hashT[i]->key << ": " 
+            << hashT[i]->value << "]" << std::endl;
+    }
+}
+
+
+⸻
+
+✅ What Was Modified
+
+🔹 insert()
+	•	Added totalInsertProbeCount++ inside loop
+	•	Added final probe count after loop
+
+🔹 lookup()
+	•	Added totalSearchProbeCount++ inside search loop
+
+🔹 deleteKey()
+	•	Left unchanged (not required)
+
+⸻
+
+🎯 Why This Is Correct
+
+Insertion:
+	•	Counts every probing attempt
+	•	Includes final successful placement
+
+Lookup:
+	•	Counts every probing attempt
+	•	Works for unsuccessful searches
+
+⸻

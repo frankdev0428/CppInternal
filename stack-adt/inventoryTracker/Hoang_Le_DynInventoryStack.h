@@ -5,6 +5,7 @@
 
 class DynInventoryStack {
  private:
+ //each stackNode is the layer of the stack container
     struct StackNode{
         Inventory item;
         StackNode* next;

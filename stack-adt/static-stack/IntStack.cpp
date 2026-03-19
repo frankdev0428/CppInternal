@@ -4,14 +4,16 @@ using namespace std;
 
 
   IntStack::IntStack(int size){
-     stackArray = new int[size];
+    // allocate int array on the heap using  "new" notation
+    // the new int array will store in the variable stackArray 
+    stackArray = new int[size];
      stackSize = size;
      top = -1;
  };
     // copy constructor
     IntStack::IntStack(const IntStack&){
       // create the stack array
-      if
+      
     };
     // destructor
     IntStack::~IntStack(){

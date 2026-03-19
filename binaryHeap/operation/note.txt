@@ -1,0 +1,11 @@
+parent(i): i / 2 → (i - 1) / 2
+leftChild(i): 2 * i → 2 * i + 1
+rightChild(i): 2 * i + 1 → 2 * i + 2
+Constructor: removed dummy -1 sentinel at index 0
+BinaryHeap.cpp
+
+percolateUp: stop condition index > 1 → index > 0
+percolateDown: bounds left/right <= currentSize → < currentSize (since valid indices are 0 to currentSize - 1)
+insert: percolateUp(currentSize) → percolateUp(currentSize - 1) (last inserted element is at 0-based index currentSize - 1)
+deleteMin: root access heap[1] → heap[0], last element heap[currentSize--] → heap[--currentSize], percolate from 1 → 0
+display: loop start i = 1 → i = 0
