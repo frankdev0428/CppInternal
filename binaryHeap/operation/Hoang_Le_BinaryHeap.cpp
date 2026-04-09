@@ -1,6 +1,6 @@
 // Implementation file for the BinaryHeap class
 #include <iostream>
-#include "BinaryHeap.h"
+#include "Hoang_Le_BinaryHeap.h"
 
 // Percolate Up to maintain heap-order property
 void BinaryHeap::percolateUp(int index){
